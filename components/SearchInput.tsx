@@ -1,22 +1,22 @@
-const url = `${""}/search/movie?query=dead`;
-const options = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ODI3MzU5NjQ1ZDk3ODk5MzA0YmMzOTk5YTc4NzY4YiIsIm5iZiI6MTcyNTQ2MjMwNC42NDg4NTUsInN1YiI6IjY2ZDg3NjFlNmRhMGIyMTRkNjI5ZTcyNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.jghREhkphmIZB_y7C6V07IaRdike1iTIt_2do7KeYEw",
-  },
-};
+"use client";
 
-const queryResult = fetch(url, options)
-  .then((res) => res.json())
-  .then((json) => {
-    console.log(json);
-    return json;
-  })
-  .catch((err) => console.error("error:" + err));
+import { getMovies } from "@/axios/movies";
+import { ChangeEvent, useRef, useState } from "react";
+import { Movie } from "@/axios/movies";
 
 export const SearchInput = () => {
+  const [queryResults, setQueryResults] = useState<Movie[]>([]);
+
+  const debounceRef = useRef<NodeJS.Timeout>();
+  const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      const data = getMovies(e.target.value);
+      console.log(data);
+    }, 1000);
+  };
+
   return (
     <form className="max-w-md mx-auto min-w-96">
       <label
@@ -49,6 +49,7 @@ export const SearchInput = () => {
           className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search Movies, Series..."
           required
+          onChange={onQueryChange}
         />
         <button
           type="submit"
@@ -56,6 +57,25 @@ export const SearchInput = () => {
         >
           Search
         </button>
+      </div>
+      <div className="p-4  text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 flex flex-col fixed min-w-96">
+        <ul role="list" className=" divide-slate-200">
+          <li className="flex py-4 first:pt-0 last:pb-0 hover:bg-slate-100 cursor-pointer">
+            <img
+              className="h-10 w-10 rounded-full"
+              src="https://image.tmdb.org/t/p/w45/1E5baAaEse26fej7uHcjOgEE2t2.jpg"
+              alt=""
+            />
+            <div className="ml-3 overflow-hidden">
+              <p className="text-sm font-medium text-slate-900">
+                {"person.name"}
+              </p>
+              <p className="text-sm text-slate-500 truncate">
+                {"person.email"}
+              </p>
+            </div>
+          </li>
+        </ul>
       </div>
     </form>
   );
