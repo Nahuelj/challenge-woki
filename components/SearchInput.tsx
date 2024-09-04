@@ -3,13 +3,19 @@
 import { getMovies } from "@/axios/movies";
 import { ChangeEvent, useRef, useState } from "react";
 import { Movie } from "@/axios/movies";
+import { useRouter } from "next/navigation";
 
 export const SearchInput = () => {
   const [queryResults, setQueryResults] = useState<Movie[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const router = useRouter();
+  const debounceRef = useRef<NodeJS.Timeout>();
+
   console.log("🚀 ~ SearchInput ~ queryResults:", queryResults);
 
-  const debounceRef = useRef<NodeJS.Timeout>();
   const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(async () => {
@@ -18,8 +24,13 @@ export const SearchInput = () => {
     }, 350);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/search?query=${encodeURIComponent(query)}`);
+  };
+
   return (
-    <form className="max-w-md mx-auto min-w-96">
+    <form className="max-w-md mx-auto min-w-96" onSubmit={handleSubmit}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
