@@ -175,3 +175,29 @@ export const getMovieDetail = async (
     return null;
   }
 };
+
+export const getSimilarMovies = async (
+  movieId: number
+): Promise<MoviesWithPagination | null> => {
+  const apiUrl = env.api_url || "";
+  const token = env.api_key;
+
+  const headers = {
+    accept: "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
+  const url = `${apiUrl}/movie/${movieId}/similar`;
+
+  console.log("🚀 ~ getSimilarMovies ~ url:", url);
+  try {
+    const response = await axios.get(url, {
+      headers,
+    });
+    console.log(response.data);
+    return response.data || null; // Ajusta esto según la estructura de la API
+  } catch (error) {
+    console.error("Error making the GET request:", error);
+    return null;
+  }
+};

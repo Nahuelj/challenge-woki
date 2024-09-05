@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { getMoviesWithPagination, MoviesWithPagination } from "@/axios/movies";
+import { useRouter } from "next/navigation";
 
 interface SearchProps {
   searchParams: {
@@ -9,6 +10,8 @@ interface SearchProps {
 }
 
 export default function Search({ searchParams }: SearchProps) {
+  const router = useRouter();
+
   //Input with debounce
   const [queryInput, setQueryInput] = useState<string>(searchParams.query);
   const [queryResults, setQueryResults] = useState<MoviesWithPagination>({
@@ -76,6 +79,12 @@ export default function Search({ searchParams }: SearchProps) {
     sync();
   }, []);
 
+  const handleSelect = (e: React.FormEvent, movieId: number) => {
+    console.log("🚀 ~ handleSelect ~ movieId:", movieId);
+    e.preventDefault();
+    router.push(`/detail/${movieId}}`);
+  };
+
   return (
     <main className="flex flex-col items-center justify-between mt-6">
       <form className="max-w-md mx-auto min-w-96 mb-6">
@@ -118,6 +127,9 @@ export default function Search({ searchParams }: SearchProps) {
         {queryResults.results.length > 0 &&
           queryResults.results.map((movie) => (
             <div
+              onClick={(e) => {
+                handleSelect(e, movie.id);
+              }}
               key={movie.id}
               className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
             >
