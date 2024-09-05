@@ -1,3 +1,5 @@
+"use client";
+import { useState, useRef, ChangeEvent } from "react";
 import { getMoviesWithPagination, MoviesWithPagination } from "@/axios/movies";
 
 interface SearchProps {
@@ -6,9 +8,8 @@ interface SearchProps {
   };
 }
 
-export default async function Search({ searchParams }: SearchProps) {
+export default function Search({ searchParams }: SearchProps) {
   const query = searchParams.query;
-  const data: MoviesWithPagination = await getMoviesWithPagination(query);
 
   const renderStars = (voteAverage: number) => {
     const totalStars = 5; // Total de estrellas a mostrar
@@ -45,45 +46,103 @@ export default async function Search({ searchParams }: SearchProps) {
     );
   };
 
+  //Input with debounce
+
+  const [queryResults, setQueryResults] = useState<MoviesWithPagination>({
+    page: 0,
+    results: [],
+    total_pages: 0,
+    total_results: 0,
+  });
+  const [queryInput, setQueryInput] = useState<string>("");
+  const debounceRef = useRef<NodeJS.Timeout>();
+
+  const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQueryInput(e.target.value);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      const data = await getMoviesWithPagination(e.target.value);
+      setQueryResults(data);
+    }, 350);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between my-20">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {data.results.map((movie) => (
-          <div
-            key={movie.id}
-            className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-          >
-            <a href="#">
-              <img
-                className="w-full h-60 object-cover rounded-t-lg"
-                src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                alt={movie.title}
+    <main className="flex flex-col items-center justify-between mt-10">
+      <form className="max-w-md mx-auto min-w-96">
+        <label
+          htmlFor="default-search"
+          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >
+          Search
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg
+              className="w-4 h-4 text-gray-500 dark:text-gray-400"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 20"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
-            </a>
-            <div className="px-5 pb-5">
+            </svg>
+          </div>
+          <input
+            type="search"
+            id="default-search"
+            className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search Movies, Series..."
+            required
+            onChange={onQueryChange}
+          />
+        </div>
+      </form>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {queryResults.results.length > 0 &&
+          queryResults.results.map((movie) => (
+            <div
+              key={movie.id}
+              className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            >
               <a href="#">
-                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white truncate">
-                  {movie.title}
-                </h5>
+                <img
+                  className="w-full h-60 object-cover rounded-t-lg"
+                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                  alt={movie.title}
+                />
               </a>
-              <div className="flex items-center mt-2.5 mb-5">
-                {renderStars(movie.vote_average)}
-                <span className="ml-2 text-gray-900 dark:text-white">
-                  {movie.vote_average.toFixed(1) / 2}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>{movie.genre_ids}</div>
-                <a
-                  href="#"
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Ver más
+              <div className="px-5 pb-5">
+                <a href="#">
+                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white truncate">
+                    {movie.title}
+                  </h5>
                 </a>
+                <div className="flex items-center mt-2.5 mb-5">
+                  {renderStars(movie.vote_average)}
+                  <span className="ml-2 text-gray-900 dark:text-white">
+                    {Number(movie.vote_average.toFixed(1)) / 2}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>{movie.genre_ids}</div>
+                  <a
+                    href="#"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Ver más
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </main>
   );
