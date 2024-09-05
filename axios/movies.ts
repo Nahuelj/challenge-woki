@@ -53,7 +53,7 @@ export interface MoviesWithPagination {
 
 export const getMoviesWithPagination = async (
   query: string
-): Promise<MoviesWithPagination[]> => {
+): Promise<MoviesWithPagination> => {
   const apiUrl = env.api_url || "";
   const token = env.api_key;
   console.log("🚀 ~ getMovies ~ token:", token);
@@ -72,9 +72,21 @@ export const getMoviesWithPagination = async (
       headers,
     });
     console.log(response.data);
-    return response.data || []; // Ajusta esto según la estructura de la API
+    return (
+      response.data || {
+        page: 0,
+        results: [],
+        total_pages: 0,
+        total_results: 0,
+      }
+    ); // Ajusta esto según la estructura de la API
   } catch (error) {
     console.error("Error making the GET request:", error);
-    return [];
+    return {
+      page: 0,
+      results: [],
+      total_pages: 0,
+      total_results: 0,
+    };
   }
 };
