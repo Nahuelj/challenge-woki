@@ -1,9 +1,10 @@
 import { SearchInput } from "@/components/SearchInput";
+import "@/app/globals.css";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between my-20">
-      <div className="bg-blue-600 p-24 flex flex-col items-center justify-center gap-7 rounded-md">
+    <main className="flex flex-col items-center justify-start total-height bg-blue-300">
+      <div className="  flex flex-col items-center justify-center gap-7 w-full   py-24 px-8">
         <div className="flex flex-col items-center justify-center align-middle">
           <h1 className="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center mb-8">
             We invest in the{" "}
@@ -18,6 +19,9 @@ export default function Home() {
         </div>
 
         <SearchInput />
+      </div>
+      <div className="bg-blue-600  flex flex-col items-center justify-center gap-7 w-full ">
+        recomendaciones
       </div>
     </main>
   );

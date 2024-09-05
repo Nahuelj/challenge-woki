@@ -2,11 +2,11 @@
 
 import { getMovies } from "@/axios/movies";
 import { ChangeEvent, useRef, useState } from "react";
-import { Movie } from "@/axios/movies";
+import { Movies } from "@/axios/movies";
 import { useRouter } from "next/navigation";
 
 export const SearchInput = () => {
-  const [queryResults, setQueryResults] = useState<Movie[]>([]);
+  const [queryResults, setQueryResults] = useState<Movies[]>([]);
   const [query, setQuery] = useState<string>("");
   const router = useRouter();
   const debounceRef = useRef<NodeJS.Timeout>();
