@@ -29,6 +29,12 @@ export const SearchInput = () => {
     router.push(`/search?query=${encodeURIComponent(query)}`);
   };
 
+  const handleSelect = (e: React.FormEvent, movieId: number) => {
+    console.log("🚀 ~ handleSelect ~ movieId:", movieId);
+    e.preventDefault();
+    router.push(`/detail/${movieId}}`);
+  };
+
   return (
     <form className="max-w-md mx-auto min-w-96" onSubmit={handleSubmit}>
       <label
@@ -76,6 +82,9 @@ export const SearchInput = () => {
           <ul role="list" className="divide-slate-200">
             {queryResults.slice(0, 4).map((movie) => (
               <li
+                onClick={(e) => {
+                  handleSelect(e, movie.id);
+                }}
                 key={movie.id}
                 className="flex py-3 px-4 items-center hover:bg-slate-100 cursor-pointer"
               >
@@ -83,6 +92,9 @@ export const SearchInput = () => {
                   className="h-12 w-12 rounded-md"
                   src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   alt={movie.title}
+                  onError={(e) => {
+                    e.currentTarget.src = "./placeholder.jpg"; // Cambia la URL a la imagen por defecto
+                  }}
                 />
                 <div className="ml-3 overflow-hidden">
                   <p className="text-sm font-medium text-slate-900">

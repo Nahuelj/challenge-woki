@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, ChangeEvent } from "react";
+import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { getMoviesWithPagination, MoviesWithPagination } from "@/axios/movies";
 
 interface SearchProps {
@@ -9,7 +9,27 @@ interface SearchProps {
 }
 
 export default function Search({ searchParams }: SearchProps) {
-  const query = searchParams.query;
+  //Input with debounce
+  const [queryInput, setQueryInput] = useState<string>(searchParams.query);
+  const [queryResults, setQueryResults] = useState<MoviesWithPagination>({
+    page: 0,
+    results: [],
+    total_pages: 0,
+    total_results: 0,
+  });
+
+  const debounceRef = useRef<NodeJS.Timeout>();
+  const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQueryInput(e.target.value);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(async () => {
+      const data = await getMoviesWithPagination(e.target.value);
+      console.log("🚀 ~ debounceRef.current=setTimeout ~ data:", data);
+      setQueryResults(data);
+    }, 350);
+  };
 
   const renderStars = (voteAverage: number) => {
     const totalStars = 5; // Total de estrellas a mostrar
@@ -46,31 +66,19 @@ export default function Search({ searchParams }: SearchProps) {
     );
   };
 
-  //Input with debounce
-
-  const [queryResults, setQueryResults] = useState<MoviesWithPagination>({
-    page: 0,
-    results: [],
-    total_pages: 0,
-    total_results: 0,
-  });
-  const [queryInput, setQueryInput] = useState<string>("");
-  const debounceRef = useRef<NodeJS.Timeout>();
-
-  const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setQueryInput(e.target.value);
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(async () => {
-      const data = await getMoviesWithPagination(e.target.value);
+  useEffect(() => {
+    async function sync() {
+      const data = await getMoviesWithPagination(queryInput);
+      console.log("🚀 ~ debounceRef.current=setTimeout ~ data:", data);
       setQueryResults(data);
-    }, 350);
-  };
+    }
+
+    sync();
+  }, []);
 
   return (
-    <main className="flex flex-col items-center justify-between mt-10">
-      <form className="max-w-md mx-auto min-w-96">
+    <main className="flex flex-col items-center justify-between mt-6">
+      <form className="max-w-md mx-auto min-w-96 mb-6">
         <label
           htmlFor="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -101,6 +109,7 @@ export default function Search({ searchParams }: SearchProps) {
             className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search Movies, Series..."
             required
+            value={queryInput}
             onChange={onQueryChange}
           />
         </div>
@@ -117,6 +126,9 @@ export default function Search({ searchParams }: SearchProps) {
                   className="w-full h-60 object-cover rounded-t-lg"
                   src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
                   alt={movie.title}
+                  onError={(e) => {
+                    e.currentTarget.src = "./placeholder.jpg"; // Cambia la URL a la imagen por defecto
+                  }}
                 />
               </a>
               <div className="px-5 pb-5">
