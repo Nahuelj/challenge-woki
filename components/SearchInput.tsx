@@ -8,10 +8,9 @@ import { useRouter } from "next/navigation";
 export const SearchInput = () => {
   const [queryResults, setQueryResults] = useState<Movies[]>([]);
   const [query, setQuery] = useState<string>("");
+  const [isFocused, setIsFocused] = useState<boolean>(false); // Estado para controlar el foco
   const router = useRouter();
   const debounceRef = useRef<NodeJS.Timeout>();
-
-  console.log("🚀 ~ SearchInput ~ queryResults:", queryResults);
 
   const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -30,13 +29,12 @@ export const SearchInput = () => {
   };
 
   const handleSelect = (e: React.FormEvent, movieId: number) => {
-    console.log("🚀 ~ handleSelect ~ movieId:", movieId);
     e.preventDefault();
-    router.push(`/detail/${movieId}}`);
+    router.push(`/detail/${movieId}`);
   };
 
   return (
-    <form className="max-w-md mx-auto min-w-96" onSubmit={handleSubmit}>
+    <form className="max-w-md mx-auto min-w-96 z-10" onSubmit={handleSubmit}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -68,6 +66,8 @@ export const SearchInput = () => {
           placeholder="Search Movies, Series..."
           required
           onChange={onQueryChange}
+          onFocus={() => setIsFocused(true)} // Muestra los resultados al enfocar
+          onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Oculta los resultados al desenfocar (con un delay para permitir clicks)
         />
         <button
           type="submit"
@@ -77,8 +77,8 @@ export const SearchInput = () => {
         </button>
       </div>
 
-      {queryResults.length > 0 && (
-        <div className="p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 flex flex-col min-w-96 absolute max-w-96">
+      {isFocused && queryResults.length > 0 && (
+        <div className="p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 flex flex-col min-w-96 absolute max-w-96 z-20">
           <ul role="list" className="divide-slate-200">
             {queryResults.slice(0, 4).map((movie) => (
               <li
@@ -93,7 +93,7 @@ export const SearchInput = () => {
                   src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   alt={movie.title}
                   onError={(e) => {
-                    e.currentTarget.src = "./placeholder.jpg"; // Cambia la URL a la imagen por defecto
+                    e.currentTarget.src = "./placeholder.jpg";
                   }}
                 />
                 <div className="ml-3 overflow-hidden">

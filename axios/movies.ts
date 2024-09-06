@@ -201,3 +201,51 @@ export const getSimilarMovies = async (
     return null;
   }
 };
+
+export const getTrendingMovies =
+  async (): Promise<MoviesWithPagination | null> => {
+    const apiUrl = "https://api.themoviedb.org/3/trending/movie/week";
+    const headers = {
+      accept: "application/json",
+      Authorization: `Bearer ${env.api_key}`,
+    };
+
+    try {
+      const response = await axios.get<MoviesWithPagination>(apiUrl, {
+        headers,
+        params: {
+          language: "en-US",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error making the GET request:", error);
+      return null;
+    }
+  };
+
+interface Genre {
+  id: number;
+  name: string;
+}
+
+interface GenreResponse {
+  genres: Genre[];
+}
+
+export const getGenres = async (): Promise<GenreResponse | null> => {
+  const url = "https://api.themoviedb.org/3/genre/movie/list";
+
+  try {
+    const response = await axios.get<GenreResponse>(url, {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${env.api_key}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    return null;
+  }
+};

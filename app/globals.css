@@ -25,3 +25,65 @@
 .total-height {
   height: calc(100vh - 72px);
 }
+
+/* globals.css */
+.parallax {
+  position: relative;
+  height: 100vh; /* Ajusta la altura según tus necesidades */
+}
+
+.parallax::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./../public/cine-background.webp"); /* Ruta correcta a tu imagen */
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+}
+.parallax::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./../public/cine-background.webp"); /* Ruta correcta a tu imagen */
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(70%) blur(5px); /* Ajusta el brillo y desenfoque de la imagen de fondo */
+}
+.parallax-content {
+  position: relative;
+  /* z-index: 2; */
+  color: #fff; /* Cambia el color del texto para que resalte más */
+}
+
+.container {
+  width: 100%;
+  min-width: 100%;
+  overflow: hidden; /* Oculta lo que sale del contenedor */
+}
+
+.slider {
+  display: flex;
+  gap: 50px;
+  width: max-content; /* Asegura que se expande según el contenido */
+  animation: scroll 120s linear infinite; /* Animación continua */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0); /* Comienza en la posición original */
+  }
+  100% {
+    transform: translateX(
+      -50%
+    ); /* Desplaza las tarjetas hacia la izquierda hasta la mitad */
+  }
+}
