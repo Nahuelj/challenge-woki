@@ -251,7 +251,7 @@ export default function Search({ searchParams }) {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500 mt-20">
+        <p className="text-center text-gray-500 mt-20 remove-mt">
           It looks like there are no results for your search. Try resetting your
           filters to continue exploring. Don’t miss out!
         </p>

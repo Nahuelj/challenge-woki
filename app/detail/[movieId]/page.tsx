@@ -57,7 +57,7 @@ const DetailPage = async ({ params }: Params) => {
         alt=""
         className="w-full h-96 object-cover overflow-hidden"
       />
-      <div className=" py-10 rounded-md flex items-center gap-14 justify-center">
+      <div className="py-10 rounded-md flex items-center  justify-center flex-wrap remove-top ">
         <img
           src={
             movieData?.poster_path
@@ -66,7 +66,7 @@ const DetailPage = async ({ params }: Params) => {
           }
           className="max-h-96 max-w-64 overflow-hidden"
         />
-        <div>
+        <div className="px-10 mx mmt">
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
               {movieData?.genres.map((genre) => {
@@ -81,12 +81,12 @@ const DetailPage = async ({ params }: Params) => {
               })}
             </div>
             <div className="flex items-center align-middle">
-              <h1 className="text-5xl font-extrabold dark:text-white">
+              <h1 className="text-5xl font-extrabold dark:text-white txt">
                 {movieData?.title}
               </h1>
             </div>
 
-            <div className="flex items-center my-8">
+            <div className="flex items-center my-8 flex-wrap txt">
               <small className="ms-2 font-semibold text-gray-500 dark:text-gray-400 text-2xl">
                 ({movieData?.release_date})
               </small>
@@ -105,24 +105,22 @@ const DetailPage = async ({ params }: Params) => {
             </div>
           </div>
 
-          <p className="mt-8 text-balance max-w-screen-sm dark:text-white">
+          <p className="mt-8 text-balance max-w-screen-sm dark:text-white txt">
             {movieData?.overview}
           </p>
         </div>
       </div>
 
-      <div className="">
+      <div className="flex flex-col items-center justify-between align-middle mt-6 p">
         <h4 className="text-2xl font-bold dark:text-white text-center my-8 mb-12">
           Similar Movies
         </h4>
 
         {similarMovies?.results?.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  mb-10">
               {similarMovies?.results.map((movie) => (
-                <div>
-                  <MovieCard movie={movie} key={movie.id} />
-                </div>
+                <MovieCard movie={movie} key={movie.id} />
               ))}
             </div>
             {/* <Pagination

@@ -100,6 +100,11 @@
     column-gap: 20px;
     margin-bottom: 50px;
   }
+
+  .remove-mt {
+    margin-top: 0px !important;
+    padding-bottom: 50px !important;
+  }
 }
 
 @media (width > 610px) {
@@ -115,6 +120,23 @@
   }
 }
 
+@media (width < 853px) {
+  .mmt {
+    margin-top: 50px;
+  }
+  .remove-top {
+    padding-bottom: 0px;
+  }
+}
+
 .p {
   padding-inline: 24px;
+}
+
+.mx {
+  max-width: 700px;
+}
+
+.txt {
+  max-width: 500px;
 }
