@@ -125,11 +125,11 @@ const DetailPage = async ({ params }: Params) => {
                 </div>
               ))}
             </div>
-            <Pagination
+            {/* <Pagination
               actualPage={similarMovies?.page}
               totalPages={similarMovies?.total_pages}
               movieId={movieData?.id}
-            />
+            /> */}
           </>
         ) : (
           <p className="text-center text-gray-500 mt-10 mb-24">

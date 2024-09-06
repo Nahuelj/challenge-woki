@@ -1,7 +1,6 @@
 import { SearchInput } from "@/components/SearchInput";
 import "@/app/globals.css";
 import { getTrendingMovies } from "@/axios/movies";
-import { GenresToggle } from "@/components/GenresToggle";
 import Link from "next/link";
 
 export default async function Home() {
@@ -9,7 +8,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col items-center justify-start ">
-      <div className="parallax  flex flex-col items-center justify-center gap-7 py-24 px-8 cine-backgound bg-cover bg-center w-full h-96 ">
+      <div className="parallax  flex flex-col items-center justify-center gap-7 py-24 px-8 cine-backgound bg-cover bg-center w-full h-96 query">
         <div className="parallax-content flex flex-col items-center justify-center align-middle">
           <h1 className="text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white text-center mb-8 z-10">
             We invest in the <span className="">world’s potential</span>
@@ -46,11 +45,11 @@ export default async function Home() {
             return (
               <Link
                 href={`/detail/${movie.id}`}
-                className="cursor-pointer bg-white shadow-lg rounded-lg  transform transition duration-300 hover:scale-105"
+                className="cursor-pointer bg-white shadow-lg rounded-lg  transform transition duration-300 hover:scale-105 poster"
               >
                 <img
                   key={movie.id}
-                  className="w-full h-80 object-cover  "
+                  className="w-full h-80 object-cover poster dark:bg-gray-900"
                   src={imageUrl}
                   alt={movie.title}
                 />

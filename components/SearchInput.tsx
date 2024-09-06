@@ -35,7 +35,7 @@ export const SearchInput = () => {
 
   return (
     <form
-      className="max-w-md mx-auto min-w-80 z-20 w-96"
+      className="max-w-md mx-auto min-w-80 z-20 w-96 input"
       onSubmit={handleSubmit}
     >
       <label
@@ -81,29 +81,29 @@ export const SearchInput = () => {
       </div>
 
       {isFocused && queryResults.length > 0 && (
-        <div className="p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 flex flex-col min-w-96 absolute max-w-96 z-20">
-          <ul role="list" className="divide-slate-200">
+        <div className="p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-1 flex flex-col  absolute max-w-96 z-20 resutlInput">
+          <ul role="list" className="divide-slate-200 input flex flex-col">
             {queryResults.slice(0, 4).map((movie) => (
               <li
                 onClick={(e) => {
                   handleSelect(e, movie.id);
                 }}
                 key={movie.id}
-                className="flex py-3 px-4 items-center hover:bg-slate-100 cursor-pointer"
+                className="flex py-3 px-4 hover:bg-slate-100 cursor-pointer input justify-start items-start"
               >
                 <img
-                  className="h-12 w-12 rounded-md"
+                  className="h-12 w-12 rounded-md "
                   src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
                   alt={movie.title}
                   onError={(e) => {
                     e.currentTarget.src = "./placeholder.jpg";
                   }}
                 />
-                <div className="ml-3 overflow-hidden">
-                  <p className="text-sm font-medium text-slate-900">
+                <div className="ml-3 overflow-hidden  flex flex-col justify-start">
+                  <p className="text-sm font-medium text-slate-900  w-fit max-w-fit">
                     {movie.title}
                   </p>
-                  <p className="text-sm text-slate-500 truncate">
+                  <p className="text-sm text-slate-500 truncate  w-fit max-w-fit">
                     {movie.overview}
                   </p>
                 </div>

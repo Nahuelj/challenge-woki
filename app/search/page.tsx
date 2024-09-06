@@ -9,9 +9,12 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { GenresToggle } from "@/components/GenresToggle";
 import { MovieCard } from "@/components/MovieCard";
+import Link from "next/link";
 
 export const RangeInput = ({ rangeValue, setRangeValue }) => {
-  const [inputValue, setInputValue] = useState(false);
+  const searchParamsHook = useSearchParams();
+  const yearParam = searchParamsHook.get("year");
+  const [inputValue, setInputValue] = useState(rangeValue);
 
   // Referencia para almacenar el timeout del debounce
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -29,7 +32,7 @@ export const RangeInput = ({ rangeValue, setRangeValue }) => {
     // Establecemos un nuevo timeout de 300ms (o el tiempo que prefieras)
     debounceRef.current = setTimeout(() => {
       setRangeValue(newRangeValue);
-    }, 300);
+    }, 350);
   };
 
   const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +76,7 @@ export default function Search({ searchParams }) {
     searchParams.query || ""
   );
   const [rangeValue, setRangeValue] = useState<number>(
-    parseInt(searchParams.releaseDate) || false
+    parseInt(searchParams.year)
   );
   // Convertir los géneros en la URL de string a array de números
   const [selectedGenres, setSelectedGenres] = useState<number[]>(
@@ -128,15 +131,6 @@ export default function Search({ searchParams }) {
   useEffect(() => {
     updateURL();
   }, [rangeValue, selectedGenres]);
-
-  // useEffect(() => {
-  //   async function sync() {
-  //     const data = await getMoviesWithPagination(queryInput);
-  //     setQueryResults(data);
-  //   }
-
-  //   sync();
-  // }, []);
 
   const isValidParam = (param: string | null) =>
     param !== null && param.trim() !== "";
@@ -235,6 +229,13 @@ export default function Search({ searchParams }) {
         </form>
 
         <RangeInput rangeValue={rangeValue} setRangeValue={setRangeValue} />
+
+        <Link
+          href={"/search"}
+          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 capitalize"
+        >
+          clear filters
+        </Link>
       </div>
       <div className="mb-9 max-w-screen-2xl">
         <GenresToggle
@@ -242,16 +243,16 @@ export default function Search({ searchParams }) {
           onGenreToggle={onGenreToggle}
         />
       </div>
-      {queryResults?.results ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
+      {queryResults?.results.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20 mb-10">
           {queryResults?.results.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
         </div>
       ) : (
         <p className="text-center text-gray-500 mt-20">
-          Looking for something special? Start typing in the search box or apply
-          filters to find the best movies and shows. Don’t miss out!
+          It looks like there are no results for your search. Try resetting your
+          filters to continue exploring. Don’t miss out!
         </p>
       )}
     </main>
