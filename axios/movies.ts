@@ -258,32 +258,78 @@ interface SearchParams {
   genres: string[];
 }
 
-export const searchMovies = async ({
-  query,
-  releaseDateGte,
-  releaseDateLte,
-  genres,
-}: SearchParams) => {
+export const searchMovies = async (
+  query: string,
+  with_genres?: string,
+  year?: number,
+  page: number = 1
+): Promise<MoviesWithPagination | null> => {
+  const apiUrl = "https://api.themoviedb.org/3/search/movie";
+  const headers = {
+    accept: "application/json",
+    Authorization: `Bearer ${env.api_key}`,
+  };
+
   try {
-    const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-    const genreQueryParam = genres.join(",");
+    const response = await axios.get<MoviesWithPagination>(apiUrl, {
+      headers,
+      params: {
+        include_adult: false,
+        include_video: false,
+        language: "en-US",
+        sort_by: "popularity.desc",
+        query, // Buscar por nombre
+        with_genres, // Filtrar por género
+        year, // Filtrar por año
+        page,
+      },
+    });
+    console.log(response.data);
 
-    const response = await axios.get(
-      "https://api.themoviedb.org/3/discover/movie",
-      {
-        params: {
-          api_key: env.api_key,
-          query: query,
-          primary_release_date_gte: releaseDateGte,
-          primary_release_date_lte: releaseDateLte,
-          with_genres: genreQueryParam,
-        },
-      }
-    );
+    // Filtrar resultados por géneros si se proporcionan
+    if (with_genres && with_genres.length > 0) {
+      response.data.results = response.data.results.filter((movie) =>
+        movie.genre_ids.some((genreId) => with_genres.includes(genreId))
+      );
+    }
 
-    return response.data.results;
+    return response.data;
   } catch (error) {
-    console.error("Error fetching movies:", error);
-    return [];
+    console.error("Error making the GET request:", error);
+    return null;
+  }
+};
+
+export const discoverMovies = async (
+  with_keywords: string,
+  with_genres?: string,
+  year?: number,
+  page: number = 1
+): Promise<MoviesWithPagination | null> => {
+  const apiUrl = "https://api.themoviedb.org/3/discover/movie";
+  const headers = {
+    accept: "application/json",
+    Authorization: `Bearer ${env.api_key}`,
+  };
+
+  try {
+    const response = await axios.get<MoviesWithPagination>(apiUrl, {
+      headers,
+      params: {
+        include_adult: false,
+        include_video: false,
+        language: "en-US",
+        sort_by: "popularity.desc",
+        with_keywords,
+        with_genres,
+        year,
+        page,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error making the GET request:", error);
+    return null;
   }
 };

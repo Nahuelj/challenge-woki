@@ -6,12 +6,10 @@ interface Genre {
   id: number;
   name: string;
 }
-
 interface GenresToggleProps {
-  selectedGenres: string[];
-  onGenreToggle: (genre: string) => void;
+  selectedGenres: number[];
+  onGenreToggle: (genreId: number) => void;
 }
-
 const buttonStyles = [
   {
     className: "bg-gradient-to-br from-purple-600 to-blue-500 ",
@@ -87,7 +85,7 @@ export const GenresToggle = ({
     setGenreStyles(stylesMap);
   }, [genres]);
 
-  const handleClick = (genreName: string) => {
+  const handleClick = (genreName: number) => {
     onGenreToggle(genreName);
   };
 
@@ -105,17 +103,17 @@ export const GenresToggle = ({
             className={`min-w-fit relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group ${
               style.className
             } ${
-              selectedGenres.includes(genre.name)
+              selectedGenres.includes(genre.id)
                 ? "bg-opacity-100"
                 : "bg-opacity-0"
             } ${
               style.hoverClass
             }  dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800`}
-            onClick={() => handleClick(genre.name)}
+            onClick={() => handleClick(genre.id)}
           >
             <span
               className={`relative px-5 py-2.5 transition-all ease-in duration-75 ${
-                selectedGenres.includes(genre.name)
+                selectedGenres.includes(genre.id)
                   ? "bg-opacity-0"
                   : "bg-white dark:bg-gray-900"
               } rounded-md`}
