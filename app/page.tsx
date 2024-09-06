@@ -23,7 +23,7 @@ export default async function Home() {
 
         <SearchInput />
 
-        <p className="mb-3 text-white dark:text-gray-400 z-20 font-light">
+        <p className="mb-3 text-white dark:text-gray-400 z-10  font-light">
           Can't find what you're looking for? perform an
           <Link href={"/search"}>
             <strong className="font-semibold text-white dark:text-white ml-1 underline underline-offset-3 decoration decoration-blue-400 dark:decoration-blue-600 z-10">

@@ -8,6 +8,8 @@ interface MovieCardProps {
 export function MovieCard({ movie }: MovieCardProps) {
   const imageUrl = movie.backdrop_path
     ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`
+    : movie.poster_path
+    ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
     : "/placeholder.jpg"; // Ruta local a la imagen de placeholder
 
   const renderStars = (voteAverage: number) => {
@@ -45,6 +47,16 @@ export function MovieCard({ movie }: MovieCardProps) {
     );
   };
 
+  const getBadgeColor = (voteAverage: number) => {
+    if (voteAverage < 3)
+      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+    if (voteAverage < 3.5)
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+    return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+  };
+
+  const voteAverage = Number(movie.vote_average.toFixed(1)) / 2;
+
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative">
       <img
@@ -59,8 +71,12 @@ export function MovieCard({ movie }: MovieCardProps) {
         <div className="flex items-center justify-between">
           <div className="flex">
             {renderStars(movie.vote_average)}
-            <span className="ml-2 text-gray-900 dark:text-white">
-              {Number(movie.vote_average.toFixed(1)) / 2}
+            <span
+              className={`ml-2 text-gray-900 dark:text-white ${getBadgeColor(
+                voteAverage
+              )} px-2.5 py-0.5 rounded-full`}
+            >
+              {voteAverage}
             </span>
           </div>
           <Link

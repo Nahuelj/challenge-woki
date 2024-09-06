@@ -249,3 +249,40 @@ export const getGenres = async (): Promise<GenreResponse | null> => {
     return null;
   }
 };
+
+interface SearchParams {
+  query: string;
+  releaseDateGte: string;
+  releaseDateLte: string;
+  genres: string[];
+}
+
+export const searchMovies = async ({
+  query,
+  releaseDateGte,
+  releaseDateLte,
+  genres,
+}: SearchParams) => {
+  try {
+    const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+    const genreQueryParam = genres.join(",");
+
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/discover/movie",
+      {
+        params: {
+          api_key: env.api_key,
+          query: query,
+          primary_release_date_gte: releaseDateGte,
+          primary_release_date_lte: releaseDateLte,
+          with_genres: genreQueryParam,
+        },
+      }
+    );
+
+    return response.data.results;
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return [];
+  }
+};

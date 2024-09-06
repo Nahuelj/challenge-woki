@@ -1,20 +1,20 @@
 "use client";
 import { useState, useRef, ChangeEvent, useEffect } from "react";
-import { getMoviesWithPagination, MoviesWithPagination } from "@/axios/movies";
-import { useRouter } from "next/navigation";
+import {
+  getMoviesWithPagination,
+  MoviesWithPagination,
+  searchMovies,
+} from "@/axios/movies";
+import { useRouter, useSearchParams } from "next/navigation";
 import { GenresToggle } from "@/components/GenresToggle";
 import { MovieCard } from "@/components/MovieCard";
 
-export const RangeInput = () => {
-  const [rangeValue, setRangeValue] = useState(1900); // Valor inicial del rango
-
-  // Maneja el cambio del rango
-  const handleRangeChange = (e) => {
+export const RangeInput = ({ rangeValue, setRangeValue }) => {
+  const handleRangeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRangeValue(Number(e.target.value));
   };
 
-  // Maneja el cambio del valor numérico
-  const handleNumberChange = (e) => {
+  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRangeValue(Number(e.target.value));
   };
 
@@ -23,7 +23,6 @@ export const RangeInput = () => {
       <div>
         <span className="dark:text-white">Release date: </span>{" "}
         <input
-          placeholder="date"
           type="number"
           min="1900"
           max="2024"
@@ -45,17 +44,19 @@ export const RangeInput = () => {
   );
 };
 
-interface SearchProps {
-  searchParams: {
-    query: string;
-  };
-}
-
-export default function Search({ searchParams }: SearchProps) {
+export default function Search({ searchParams }) {
   const router = useRouter();
+  const searchParamsHook = useSearchParams();
 
-  //Input with debounce
-  const [queryInput, setQueryInput] = useState<string>(searchParams.query);
+  const [queryInput, setQueryInput] = useState<string>(
+    searchParams.query || ""
+  );
+  const [rangeValue, setRangeValue] = useState<number>(
+    parseInt(searchParams.releaseDate) || 1900
+  );
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    searchParams.genres?.split(",") || []
+  );
   const [queryResults, setQueryResults] = useState<MoviesWithPagination>({
     page: 0,
     results: [],
@@ -64,68 +65,47 @@ export default function Search({ searchParams }: SearchProps) {
   });
 
   const debounceRef = useRef<NodeJS.Timeout>();
+
+  const updateURL = () => {
+    const params = new URLSearchParams();
+    if (queryInput) params.set("query", queryInput);
+    if (rangeValue) params.set("releaseDate", rangeValue.toString());
+    if (selectedGenres.length > 0)
+      params.set("genres", selectedGenres.join(","));
+    router.push(`?${params.toString()}`);
+  };
+
   const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQueryInput(e.target.value);
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(async () => {
+      updateURL();
       const data = await getMoviesWithPagination(e.target.value);
-      console.log("🚀 ~ debounceRef.current=setTimeout ~ data:", data);
       setQueryResults(data);
     }, 350);
   };
 
-  const renderStars = (voteAverage: number) => {
-    const totalStars = 5; // Total de estrellas a mostrar
-    const filledStars = Math.round(voteAverage / 2); // Número de estrellas llenas
-    const emptyStars = totalStars - filledStars; // Número de estrellas vacías
-
-    return (
-      <div className="flex items-center space-x-1 rtl:space-x-reverse">
-        {[...Array(filledStars)].map((_, index) => (
-          <svg
-            key={index}
-            className="w-4 h-4 text-yellow-300"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 22 20"
-          >
-            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-          </svg>
-        ))}
-        {[...Array(emptyStars)].map((_, index) => (
-          <svg
-            key={index + filledStars}
-            className="w-4 h-4 text-gray-200 dark:text-gray-600"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 22 20"
-          >
-            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-          </svg>
-        ))}
-      </div>
-    );
+  const onGenreToggle = (genre: string) => {
+    const newGenres = selectedGenres.includes(genre)
+      ? selectedGenres.filter((g) => g !== genre)
+      : [...selectedGenres, genre];
+    setSelectedGenres(newGenres);
   };
+
+  useEffect(() => {
+    updateURL();
+  }, [rangeValue, selectedGenres]);
 
   useEffect(() => {
     async function sync() {
       const data = await getMoviesWithPagination(queryInput);
-      console.log("🚀 ~ debounceRef.current=setTimeout ~ data:", data);
       setQueryResults(data);
     }
 
     sync();
   }, []);
-
-  const handleSelect = (e: React.FormEvent, movieId: number) => {
-    console.log("🚀 ~ handleSelect ~ movieId:", movieId);
-    e.preventDefault();
-    router.push(`/detail/${movieId}}`);
-  };
 
   return (
     <main className="flex flex-col items-center justify-between align-middle mt-6">
@@ -134,7 +114,7 @@ export default function Search({ searchParams }: SearchProps) {
       </h2>
 
       <div className="flex flex-wrap justify-center items-center gap-14 mb-9">
-        <form className="max-w-md mx-auto min-w-96 ">
+        <form className="max-w-md mx-auto min-w-96">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -171,62 +151,26 @@ export default function Search({ searchParams }: SearchProps) {
           </div>
         </form>
 
-        <RangeInput />
+        <RangeInput rangeValue={rangeValue} setRangeValue={setRangeValue} />
       </div>
       <div className="mb-9 max-w-screen-2xl">
-        <GenresToggle />
+        <GenresToggle
+          selectedGenres={selectedGenres}
+          onGenreToggle={onGenreToggle}
+        />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
-        {queryResults?.results.map((movie) => {
-          return <MovieCard movie={movie} key={movie.id} />;
-        })}
-      </div>
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {queryResults.results.length > 0 &&
-          queryResults.results.map((movie) => (
-            <div
-              onClick={(e) => {
-                handleSelect(e, movie.id);
-              }}
-              key={movie.id}
-              className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-            >
-              <a href="#">
-                <img
-                  className="w-full h-60 object-cover rounded-t-lg"
-                  src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                  alt={movie.title}
-                  onError={(e) => {
-                    e.currentTarget.src = "./placeholder.jpg"; // Cambia la URL a la imagen por defecto
-                  }}
-                />
-              </a>
-              <div className="px-5 pb-5">
-                <a href="#">
-                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white truncate">
-                    {movie.title}
-                  </h5>
-                </a>
-                <div className="flex items-center mt-2.5 mb-5">
-                  {renderStars(movie.vote_average)}
-                  <span className="ml-2 text-gray-900 dark:text-white">
-                    {Number(movie.vote_average.toFixed(1)) / 2}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>{movie.genre_ids}</div>
-                  <a
-                    href="#"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  >
-                    Ver más
-                  </a>
-                </div>
-              </div>
-            </div>
+      {queryInput && queryResults?.results ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
+          {queryResults?.results.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
           ))}
-      </div> */}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500 mt-20">
+          Looking for something special? Start typing in the search box or apply
+          filters to find the best movies and shows. Don’t miss out!
+        </p>
+      )}
     </main>
   );
 }

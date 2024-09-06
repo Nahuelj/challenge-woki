@@ -35,7 +35,7 @@ export const SearchInput = () => {
 
   return (
     <form
-      className="max-w-md mx-auto min-w-80 z-10 w-96"
+      className="max-w-md mx-auto min-w-80 z-20 w-96"
       onSubmit={handleSubmit}
     >
       <label

@@ -47,14 +47,22 @@ const DetailPage = async ({ params }: Params) => {
   return (
     <div>
       <img
-        src={`https://image.tmdb.org/t/p/original/${movieData?.backdrop_path}`}
+        src={
+          movieData?.backdrop_path
+            ? `https://image.tmdb.org/t/p/original/${movieData?.backdrop_path}`
+            : "/placeholder.jpg"
+        }
         alt=""
-        className="w-full h-96 object-cover"
+        className="w-full h-96 object-cover overflow-hidden"
       />
       <div className=" py-10 rounded-md flex items-center gap-14 justify-center">
         <img
-          src={`https://image.tmdb.org/t/p/original/${movieData?.poster_path}`}
-          className="max-h-96"
+          src={
+            movieData?.poster_path
+              ? `https://image.tmdb.org/t/p/original/${movieData?.poster_path}`
+              : "/placeholder.jpg"
+          }
+          className="max-h-96 max-w-64 overflow-hidden"
         />
         <div>
           <div>
@@ -95,7 +103,7 @@ const DetailPage = async ({ params }: Params) => {
             </div>
           </div>
 
-          <p className="mt-8 text-balance max-w-screen-sm">
+          <p className="mt-8 text-balance max-w-screen-sm dark:text-white">
             {movieData?.overview}
           </p>
         </div>
@@ -105,11 +113,18 @@ const DetailPage = async ({ params }: Params) => {
         <h4 className="text-2xl font-bold dark:text-white text-center my-8 mb-12">
           Similar Movies
         </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
-          {similarMovies?.results.map((movie) => {
-            return <MovieCard movie={movie} key={movie.id} />;
-          })}
-        </div>
+
+        {similarMovies?.results?.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
+            {similarMovies?.results.map((movie) => (
+              <MovieCard movie={movie} key={movie.id} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 mt-20">
+            No similar movies found. Try another movie!
+          </p>
+        )}
       </div>
     </div>
   );
