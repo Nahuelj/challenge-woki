@@ -3,6 +3,7 @@ import { useState, useRef, ChangeEvent, useEffect } from "react";
 import { getMoviesWithPagination, MoviesWithPagination } from "@/axios/movies";
 import { useRouter } from "next/navigation";
 import { GenresToggle } from "@/components/GenresToggle";
+import { MovieCard } from "@/components/MovieCard";
 
 export const RangeInput = () => {
   const [rangeValue, setRangeValue] = useState(1900); // Valor inicial del rango
@@ -20,7 +21,7 @@ export const RangeInput = () => {
   return (
     <div className="space-y-4">
       <div>
-        <span>Release date: </span>{" "}
+        <span className="dark:text-white">Release date: </span>{" "}
         <input
           placeholder="date"
           type="number"
@@ -128,6 +129,10 @@ export default function Search({ searchParams }: SearchProps) {
 
   return (
     <main className="flex flex-col items-center justify-between align-middle mt-6">
+      <h2 className="text-4xl font-bold dark:text-white capitalize mb-9">
+        advanced search
+      </h2>
+
       <div className="flex flex-wrap justify-center items-center gap-14 mb-9">
         <form className="max-w-md mx-auto min-w-96 ">
           <label
@@ -171,7 +176,13 @@ export default function Search({ searchParams }: SearchProps) {
       <div className="mb-9 max-w-screen-2xl">
         <GenresToggle />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
+        {queryResults?.results.map((movie) => {
+          return <MovieCard movie={movie} key={movie.id} />;
+        })}
+      </div>
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {queryResults.results.length > 0 &&
           queryResults.results.map((movie) => (
             <div
@@ -215,7 +226,7 @@ export default function Search({ searchParams }: SearchProps) {
               </div>
             </div>
           ))}
-      </div>
+      </div> */}
     </main>
   );
 }

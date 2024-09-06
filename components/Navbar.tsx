@@ -31,7 +31,7 @@ export const Navbar = () => {
           >
             Sign up
           </a> */}
-          <button
+          {/* <button
             data-collapse-toggle="mega-menu-icons"
             type="button"
             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -54,7 +54,7 @@ export const Navbar = () => {
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
-          </button>
+          </button> */}
           <button
             onClick={toggleDarkMode}
             id="theme-toggle"
@@ -93,10 +93,10 @@ export const Navbar = () => {
             {/* <li>
               <a
                 href="#"
-                className="block py-2 px-3 text-blue-600 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-blue-500 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block py-2 px-3 text-blue-600 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-blue-500 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700 capitalize"
                 aria-current="page"
               >
-                Home
+                advanced search
               </a>
             </li> */}
             <li>
