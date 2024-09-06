@@ -154,15 +154,27 @@ export default function Search({ searchParams }) {
   };
 
   useEffect(() => {
-    const params = getValidParams(yearParam, queryParam, genresParam);
-
     const fetchMovies = async () => {
-      const data = await searchMovies(
-        params.with_keywords || "",
-        params.with_genres,
-        params.year,
-        1
-      );
+      let data: MoviesWithPagination | null = null;
+
+      if (queryParam) {
+        // Si existe queryParam, usa searchMovies
+        data = await searchMovies(
+          queryParam,
+          genresParam || "",
+          yearParam ? parseInt(yearParam, 10) : undefined,
+          1
+        );
+      } else {
+        // Si no existe queryParam, usa discoverMovies
+        data = await discoverMovies(
+          "", // Pasar un valor vacío para query ya que no se está buscando por query
+          genresParam || "",
+          yearParam,
+          1
+        );
+      }
+
       setQueryResults(
         data || {
           page: 0,
@@ -174,7 +186,7 @@ export default function Search({ searchParams }) {
     };
 
     fetchMovies();
-  }, [yearParam, queryParam, genresParam]);
+  }, [queryParam, genresParam, yearParam]);
 
   return (
     <main className="flex flex-col items-center justify-between align-middle mt-6">
