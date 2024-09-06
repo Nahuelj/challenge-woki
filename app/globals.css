@@ -102,6 +102,12 @@
   }
 }
 
+@media (width > 610px) {
+  .input {
+    min-width: 384px;
+  }
+}
+
 @media (width < 380px) {
   .input {
     width: 280px;

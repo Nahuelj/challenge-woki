@@ -185,19 +185,19 @@ export default function Search({ searchParams }) {
 
   return (
     <main className="flex flex-col items-center justify-between align-middle mt-6 p">
-      <h2 className="text-4xl font-bold dark:text-white capitalize mb-9">
+      <h2 className="text-4xl font-bold dark:text-white capitalize mb-9 text-center">
         advanced search
       </h2>
 
       <div className="flex flex-wrap justify-center items-center gap-14 mb-9 gap">
-        <form className="max-w-md mx-auto min-w-96">
+        <form className="max-w-md mx-auto  input">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
           >
             Search
           </label>
-          <div className="relative">
+          <div className="relative input">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg
                 className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -218,7 +218,7 @@ export default function Search({ searchParams }) {
             <input
               type="search"
               id="default-search"
-              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 input"
               placeholder="Search Movies, Series..."
               required
               autoComplete="off"
