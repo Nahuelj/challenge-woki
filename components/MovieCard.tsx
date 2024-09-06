@@ -68,7 +68,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white truncate mt-3 mb-1">
           {movie.title}
         </h5>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap">
           <div className="flex">
             {renderStars(movie.vote_average)}
             <span
@@ -81,7 +81,7 @@ export function MovieCard({ movie }: MovieCardProps) {
           </div>
           <Link
             href={`/detail/${movie.id}`}
-            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 capitalize"
+            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 capitalize ml-auto"
           >
             more details
           </Link>

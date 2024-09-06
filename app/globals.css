@@ -96,6 +96,10 @@
   .poster {
     margin-bottom: 50px;
   }
+  .gap {
+    column-gap: 20px;
+    margin-bottom: 50px;
+  }
 }
 
 @media (width < 380px) {
@@ -103,4 +107,8 @@
     width: 280px;
     min-width: none;
   }
+}
+
+.p {
+  padding-inline: 24px;
 }

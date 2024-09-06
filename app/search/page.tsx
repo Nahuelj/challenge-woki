@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { GenresToggle } from "@/components/GenresToggle";
 import { MovieCard } from "@/components/MovieCard";
 import Link from "next/link";
+import "@/app/globals.css";
 
 export const RangeInput = ({ rangeValue, setRangeValue }) => {
   const searchParamsHook = useSearchParams();
@@ -183,12 +184,12 @@ export default function Search({ searchParams }) {
   }, [queryParam, genresParam, yearParam]);
 
   return (
-    <main className="flex flex-col items-center justify-between align-middle mt-6">
+    <main className="flex flex-col items-center justify-between align-middle mt-6 p">
       <h2 className="text-4xl font-bold dark:text-white capitalize mb-9">
         advanced search
       </h2>
 
-      <div className="flex flex-wrap justify-center items-center gap-14 mb-9">
+      <div className="flex flex-wrap justify-center items-center gap-14 mb-9 gap">
         <form className="max-w-md mx-auto min-w-96">
           <label
             htmlFor="default-search"
@@ -244,7 +245,7 @@ export default function Search({ searchParams }) {
         />
       </div>
       {queryResults?.results.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  mb-10">
           {queryResults?.results.map((movie) => (
             <MovieCard movie={movie} key={movie.id} />
           ))}
