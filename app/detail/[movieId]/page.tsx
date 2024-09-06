@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { getMovieDetail, getSimilarMovies } from "@/axios/movies";
 import { MovieCard } from "@/components/MovieCard";
+import Link from "next/link";
+import { Pagination } from "@/components/Pagination";
 
 interface Params {
   params: {
@@ -115,14 +117,26 @@ const DetailPage = async ({ params }: Params) => {
         </h4>
 
         {similarMovies?.results?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20">
-            {similarMovies?.results.map((movie) => (
-              <MovieCard movie={movie} key={movie.id} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-20 mb-10">
+              {similarMovies?.results.map((movie) => (
+                <div>
+                  <MovieCard movie={movie} key={movie.id} />
+                </div>
+              ))}
+            </div>
+            <Pagination
+              actualPage={similarMovies?.page}
+              totalPages={similarMovies?.total_pages}
+              movieId={movieData?.id}
+            />
+          </>
         ) : (
-          <p className="text-center text-gray-500 mt-20">
-            No similar movies found. Try another movie!
+          <p className="text-center text-gray-500 mt-10 mb-24">
+            No similar movies found. Try another movie!{" "}
+            <Link className="font-semibold underline" href={"/search"}>
+              Search Movie
+            </Link>
           </p>
         )}
       </div>

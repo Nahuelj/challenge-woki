@@ -177,7 +177,8 @@ export const getMovieDetail = async (
 };
 
 export const getSimilarMovies = async (
-  movieId: number
+  movieId: number,
+  page: number = 1
 ): Promise<MoviesWithPagination | null> => {
   const apiUrl = env.api_url || "";
   const token = env.api_key;
@@ -187,7 +188,7 @@ export const getSimilarMovies = async (
     Authorization: `Bearer ${token}`,
   };
 
-  const url = `${apiUrl}/movie/${movieId}/similar`;
+  const url = `${apiUrl}/movie/${movieId}/similar?page=${page}`;
 
   console.log("🚀 ~ getSimilarMovies ~ url:", url);
   try {
