@@ -34,7 +34,10 @@ export const SearchInput = () => {
   };
 
   return (
-    <form className="max-w-md mx-auto min-w-96 z-10" onSubmit={handleSubmit}>
+    <form
+      className="max-w-md mx-auto min-w-80 z-10 w-96"
+      onSubmit={handleSubmit}
+    >
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"

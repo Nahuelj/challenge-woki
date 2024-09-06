@@ -22,29 +22,11 @@
   }
 }
 
-.total-height {
-  height: calc(100vh - 72px);
-}
-
 /* globals.css */
 .parallax {
   position: relative;
-  height: 100vh; /* Ajusta la altura según tus necesidades */
 }
 
-.parallax::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("./../public/cine-background.webp"); /* Ruta correcta a tu imagen */
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.8;
-}
 .parallax::before {
   content: "";
   position: absolute;

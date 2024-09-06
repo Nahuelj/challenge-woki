@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col items-center justify-start ">
-      <div className="parallax  flex flex-col items-center justify-center gap-7 py-24 px-8 cine-backgound bg-cover bg-center w-full h-96  max-h-96">
+      <div className="parallax  flex flex-col items-center justify-center gap-7 py-24 px-8 cine-backgound bg-cover bg-center w-full h-96 ">
         <div className="parallax-content flex flex-col items-center justify-center align-middle">
           <h1 className="text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white text-center mb-8 z-10">
             We invest in the{" "}
@@ -21,11 +21,11 @@ export default async function Home() {
             and capital can unlock long-term value and drive economic growth.
           </p>
         </div>
+        {/* <GenresToggle /> */}
 
         <SearchInput />
-        <GenresToggle />
       </div>
-      <h4 className="text-2xl font-bold dark:text-white text-center my-8">
+      <h4 className="text-2xl font-bold dark:text-white text-center my-8 capitalize">
         Weekly movie recommendation
       </h4>
 

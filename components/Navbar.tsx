@@ -90,7 +90,7 @@ export const Navbar = () => {
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
         >
           <ul className="flex flex-col mt-4 font-medium md:flex-row md:mt-0 md:space-x-8 rtl:space-x-reverse">
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="block py-2 px-3 text-blue-600 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-blue-500 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
@@ -98,9 +98,9 @@ export const Navbar = () => {
               >
                 Home
               </a>
-            </li>
+            </li> */}
             <li>
-              <button
+              {/* <button
                 id="mega-menu-icons-dropdown-button"
                 data-dropdown-toggle="mega-menu-icons-dropdown"
                 className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
@@ -121,7 +121,7 @@ export const Navbar = () => {
                     d="m1 1 4 4 4-4"
                   />
                 </svg>
-              </button>
+              </button> */}
               <div
                 id="mega-menu-icons-dropdown"
                 className="absolute z-10 grid hidden w-auto grid-cols-2 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 md:grid-cols-3 dark:bg-gray-700"
@@ -345,14 +345,14 @@ export const Navbar = () => {
                 </div>
               </div>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Team
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
