@@ -11,11 +11,11 @@ export default async function Home() {
       <div className="parallax  flex flex-col items-center justify-center gap-7 py-24 px-8 cine-backgound bg-cover bg-center w-full h-96 query">
         <div className="parallax-content flex flex-col items-center justify-center align-middle">
           <h1 className="text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white text-center mb-8 z-10">
-            We invest in the <span className="">world’s potential</span>
+            Discover Movies with Complete Details
           </h1>
           <p className="text-lg font-light text-white lg:text-xl  text-balance max-w-5xl text-center z-10 ">
-            Here at Flowbite we focus on markets where technology, innovation,
-            and capital can unlock long-term value and drive economic growth.
+            Explore our movie database to find detailed info and reviews on your
+            next favorite film. From new releases to classics, we've got it all.
           </p>
         </div>
         {/* <GenresToggle /> */}
@@ -41,9 +41,10 @@ export default async function Home() {
           {trendingMovies?.results.map((movie) => {
             const imageUrl = movie.backdrop_path
               ? `https://image.tmdb.org/t/p/original/${movie.poster_path}`
-              : "/placeholder.jpg"; // Ruta local a la imagen de placeholder
+              : "/placeholder.jpg";
             return (
               <Link
+                key={movie.id}
                 href={`/detail/${movie.id}`}
                 className="cursor-pointer bg-white shadow-lg rounded-lg  transform transition duration-300 hover:scale-105 poster"
               >

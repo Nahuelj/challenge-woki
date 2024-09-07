@@ -289,7 +289,9 @@ export const searchMovies = async (
     // Filtrar resultados por géneros si se proporcionan
     if (with_genres && with_genres.length > 0) {
       response.data.results = response.data.results.filter((movie) =>
-        movie.genre_ids.some((genreId) => with_genres.includes(genreId))
+        movie.genre_ids.some((genreId) =>
+          with_genres.includes(genreId.toString())
+        )
       );
     }
 

@@ -11,62 +11,17 @@ import { GenresToggle } from "@/components/GenresToggle";
 import { MovieCard } from "@/components/MovieCard";
 import Link from "next/link";
 import "@/app/globals.css";
+import { RangeInput } from "@/components/RangeInput";
 
-export const RangeInput = ({ rangeValue, setRangeValue }) => {
-  const searchParamsHook = useSearchParams();
-  const yearParam = searchParamsHook.get("year");
-  const [inputValue, setInputValue] = useState(rangeValue);
-
-  // Referencia para almacenar el timeout del debounce
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
-
-  const handleRangeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newRangeValue = Number(e.target.value);
-
-    setInputValue(newRangeValue);
-
-    // Si ya había un timeout anterior, lo limpiamos
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    // Establecemos un nuevo timeout de 300ms (o el tiempo que prefieras)
-    debounceRef.current = setTimeout(() => {
-      setRangeValue(newRangeValue);
-    }, 350);
+interface SearchProps {
+  searchParams: {
+    query?: string;
+    year?: number;
+    genres?: number;
   };
+}
 
-  const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(Number(e.target.value));
-  };
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <span className="dark:text-white">Release date: </span>
-        <input
-          type="number"
-          min="1900"
-          max="2024"
-          value={inputValue}
-          onChange={handleNumberChange}
-          className="w-20 p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        />
-      </div>
-      <input
-        id="range-input"
-        type="range"
-        min="1900"
-        max="2024"
-        value={inputValue}
-        onChange={handleRangeChange}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-      />
-    </div>
-  );
-};
-
-export default function Search({ searchParams }) {
+export default function Search({ searchParams }: SearchProps) {
   const router = useRouter();
   const searchParamsHook = useSearchParams();
   const yearParam = searchParamsHook.get("year");
@@ -76,9 +31,7 @@ export default function Search({ searchParams }) {
   const [queryInput, setQueryInput] = useState<string>(
     searchParams.query || ""
   );
-  const [rangeValue, setRangeValue] = useState<number>(
-    parseInt(searchParams.year)
-  );
+  const [rangeValue, setRangeValue] = useState<number>(searchParams.year || 0);
   // Convertir los géneros en la URL de string a array de números
   const [selectedGenres, setSelectedGenres] = useState<number[]>(
     genresParam ? genresParam.split(",").map(Number) : []
@@ -97,7 +50,7 @@ export default function Search({ searchParams }) {
 
     // Evita actualizaciones si no hay cambios
     if (queryInput) params.set("query", queryInput);
-    if (rangeValue !== searchParams.releaseDate)
+    if (rangeValue !== searchParams.year)
       params.set("year", rangeValue.toString());
     if (selectedGenres.length > 0)
       params.set("genres", selectedGenres.join(","));
@@ -122,7 +75,7 @@ export default function Search({ searchParams }) {
     }, 350);
   };
 
-  const onGenreToggle = (genre: string) => {
+  const onGenreToggle = (genre: number) => {
     const newGenres = selectedGenres.includes(genre)
       ? selectedGenres.filter((g) => g !== genre)
       : [...selectedGenres, genre];
@@ -142,7 +95,7 @@ export default function Search({ searchParams }) {
     genresParam: string | null
   ) => {
     const params: { [key: string]: any } = {};
-    if (isValidParam(yearParam)) params.year = parseInt(yearParam, 10);
+    if (isValidParam(yearParam)) params.year = yearParam;
     if (isValidParam(queryParam)) params.with_keywords = queryParam;
     if (isValidParam(genresParam)) params.with_genres = genresParam;
     return params;
@@ -165,7 +118,7 @@ export default function Search({ searchParams }) {
         data = await discoverMovies(
           "", // Pasar un valor vacío para query ya que no se está buscando por query
           genresParam || "",
-          yearParam,
+          parseInt(yearParam || ""),
           1
         );
       }
