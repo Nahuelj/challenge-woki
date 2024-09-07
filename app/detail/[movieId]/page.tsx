@@ -26,7 +26,6 @@ const DetailPage = async ({ params }: Params) => {
 
   const movieData = await getMovieDetail(movieId);
   const similarMovies = await getSimilarMovies(movieId);
-  console.log("🚀 ~ DetailPage ~ similarMovies:", similarMovies);
 
   // Array de clases para los diferentes estilos de los spans
   const tagStyles = [

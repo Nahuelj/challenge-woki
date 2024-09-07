@@ -1,6 +1,5 @@
 "use client";
-import { useState, useRef, ChangeEvent } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef, ChangeEvent } from "react";
 import "@/app/globals.css";
 
 interface RangeInputProps {
@@ -9,31 +8,32 @@ interface RangeInputProps {
 }
 
 export const RangeInput = ({ rangeValue, setRangeValue }: RangeInputProps) => {
-  const searchParamsHook = useSearchParams();
-  const yearParam = searchParamsHook.get("year");
-  const [inputValue, setInputValue] = useState(rangeValue);
-
-  // Referencia para almacenar el timeout del debounce
+  const [localValue, setLocalValue] = useState(rangeValue); // Estado local para el input
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalValue(rangeValue); // Sincroniza el estado local con el valor global cuando cambie
+  }, [rangeValue]);
 
   const handleRangeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newRangeValue = Number(e.target.value);
-
-    setInputValue(newRangeValue);
+    setLocalValue(newRangeValue); // Actualiza el estado local inmediatamente
 
     // Si ya había un timeout anterior, lo limpiamos
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
-    // Establecemos un nuevo timeout de 300ms (o el tiempo que prefieras)
+    // Establecemos un nuevo timeout de 350ms
     debounceRef.current = setTimeout(() => {
-      setRangeValue(newRangeValue);
+      setRangeValue(newRangeValue); // Actualiza el valor global con debounce
     }, 350);
   };
 
   const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(Number(e.target.value));
+    const newNumberValue = Number(e.target.value);
+    setLocalValue(newNumberValue); // Actualiza el estado local
+    setRangeValue(newNumberValue); // Actualiza el valor global inmediatamente
   };
 
   return (
@@ -44,7 +44,7 @@ export const RangeInput = ({ rangeValue, setRangeValue }: RangeInputProps) => {
           type="number"
           min="1900"
           max="2024"
-          value={inputValue}
+          value={localValue} // Usar el estado local para actualizaciones inmediatas
           onChange={handleNumberChange}
           className="w-20 p-2 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
         />
@@ -54,7 +54,7 @@ export const RangeInput = ({ rangeValue, setRangeValue }: RangeInputProps) => {
         type="range"
         min="1900"
         max="2024"
-        value={inputValue}
+        value={localValue} // Usar el estado local para actualizaciones inmediatas
         onChange={handleRangeChange}
         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
       />

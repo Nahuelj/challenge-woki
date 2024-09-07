@@ -21,9 +21,7 @@ export interface Movies {
 export const getMovies = async (query: string): Promise<Movies[]> => {
   const apiUrl = env.api_url || "";
   const token = env.api_key;
-  console.log("🚀 ~ getMovies ~ token:", token);
 
-  console.log("🚀 ~ getMovies ~ apiUrl:", apiUrl);
   const headers = {
     accept: "application/json",
     Authorization: `Bearer ${env.api_key}`,
@@ -31,12 +29,10 @@ export const getMovies = async (query: string): Promise<Movies[]> => {
 
   const url = `${apiUrl}/search/movie?query=${query}`;
 
-  console.log("🚀 ~ getMovies ~ url:", url);
   try {
     const response = await axios.get(url, {
       headers,
     });
-    console.log(response.data);
     return response.data.results || []; // Ajusta esto según la estructura de la API
   } catch (error) {
     console.error("Error making the GET request:", error);
@@ -56,9 +52,7 @@ export const getMoviesWithPagination = async (
 ): Promise<MoviesWithPagination> => {
   const apiUrl = env.api_url || "";
   const token = env.api_key;
-  console.log("🚀 ~ getMovies ~ token:", token);
 
-  console.log("🚀 ~ getMovies ~ apiUrl:", apiUrl);
   const headers = {
     accept: "application/json",
     Authorization: `Bearer ${env.api_key}`,
@@ -66,12 +60,10 @@ export const getMoviesWithPagination = async (
 
   const url = `${apiUrl}/search/movie?query=${query}`;
 
-  console.log("🚀 ~ getMovies ~ url:", url);
   try {
     const response = await axios.get(url, {
       headers,
     });
-    console.log(response.data);
     return (
       response.data || {
         page: 0,
@@ -154,8 +146,6 @@ export const getMovieDetail = async (
   movieId: number
 ): Promise<MovieDetail | null> => {
   const token = env.api_key;
-  console.log("🚀 ~ getMovieDetail ~ movieId:", movieId);
-  console.log("🚀 ~ getMovieDetail ~ token:", token);
 
   const headers = {
     accept: "application/json",
@@ -168,7 +158,6 @@ export const getMovieDetail = async (
     const response = await axios.get(url, {
       headers,
     });
-    console.log(response.data);
     return response.data || []; // Ajusta esto según la estructura de la API
   } catch (error) {
     console.error("Error making the GET request:", error);
@@ -190,12 +179,10 @@ export const getSimilarMovies = async (
 
   const url = `${apiUrl}/movie/${movieId}/similar?page=${page}`;
 
-  console.log("🚀 ~ getSimilarMovies ~ url:", url);
   try {
     const response = await axios.get(url, {
       headers,
     });
-    console.log(response.data);
     return response.data || null; // Ajusta esto según la estructura de la API
   } catch (error) {
     console.error("Error making the GET request:", error);
@@ -284,7 +271,6 @@ export const searchMovies = async (
         page,
       },
     });
-    console.log(response.data);
 
     // Filtrar resultados por géneros si se proporcionan
     if (with_genres && with_genres.length > 0) {
@@ -328,7 +314,6 @@ export const discoverMovies = async (
         page,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error making the GET request:", error);
