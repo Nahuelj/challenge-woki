@@ -21,7 +21,7 @@ interface SearchProps {
   };
 }
 
-export default function Search({ searchParams }: SearchProps) {
+export default function Page({ searchParams }: SearchProps) {
   const router = useRouter();
   const searchParamsHook = useSearchParams();
   const yearParam = searchParamsHook.get("year");

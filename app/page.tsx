@@ -15,7 +15,7 @@ export default async function Home() {
           </h1>
           <p className="text-lg font-light text-white lg:text-xl  text-balance max-w-5xl text-center z-10 ">
             Explore our movie database to find detailed info and reviews on your
-            next favorite film. From new releases to classics, we've got it all.
+            next favorite film. From new releases to classics, we ve got it all.
           </p>
         </div>
         {/* <GenresToggle /> */}
@@ -23,7 +23,7 @@ export default async function Home() {
         <SearchInput />
 
         <p className="mb-3 text-white dark:text-gray-400 z-10  font-light">
-          Can't find what you're looking for? perform an
+          Cant find what youre looking for? perform an
           <Link href={"/search"}>
             <strong className="font-semibold text-white dark:text-white ml-1 underline underline-offset-3 decoration decoration-blue-400 dark:decoration-blue-600 z-10">
               {" "}
