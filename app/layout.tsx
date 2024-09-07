@@ -19,20 +19,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" href="/logo.svg" sizes="any" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="WokiMovies" />
-        <meta property="og:url" content="https://wokimovies.vercel.app/" />
-        <meta
-          property="og:image"
-          content="https://firebasestorage.googleapis.com/v0/b/reserva-turnos-online.appspot.com/o/Captura%20de%20pantalla%202024-09-06%20220548.png?alt=media&token=622cc5d5-e0e2-445c-8266-d94a83fc7183"
-        />
-        <meta
-          property="og:description"
-          content="Discover and explore an extensive collection of movies with WokiMovies. Our platform allows you to easily search for films by title, genre, and release year. Whether you're looking for the latest blockbusters, hidden gems, or classic favorites, WokiMovies provides comprehensive movie details and recommendations. Enjoy a user-friendly interface and stay updated with the latest in film entertainment. Find your next favorite movie today with WokiMovies!"
-        ></meta>
-      </Head>
+      <link rel="icon" href="/logo.svg" sizes="any" />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="WokiMovies" />
+      <meta property="og:url" content="https://wokimovies.vercel.app/" />
+      <meta
+        property="og:image"
+        content="https://firebasestorage.googleapis.com/v0/b/reserva-turnos-online.appspot.com/o/Captura%20de%20pantalla%202024-09-06%20220548.png?alt=media&token=622cc5d5-e0e2-445c-8266-d94a83fc7183"
+      />
+      <meta
+        property="og:description"
+        content="Discover and explore an extensive collection of movies with WokiMovies. Our platform allows you to easily search for films by title, genre, and release year. Whether you're looking for the latest blockbusters, hidden gems, or classic favorites, WokiMovies provides comprehensive movie details and recommendations. Enjoy a user-friendly interface and stay updated with the latest in film entertainment. Find your next favorite movie today with WokiMovies!"
+      ></meta>
 
       <body
         className={`${inter.className} bg-white dark:bg-gray-900 min-h-screen`}
