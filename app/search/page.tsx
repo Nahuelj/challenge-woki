@@ -6,7 +6,7 @@ import {
   discoverMovies,
   searchMovies,
 } from "@/axios/movies";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { GenresToggle } from "@/components/GenresToggle";
 import { MovieCard } from "@/components/MovieCard";
 import Link from "next/link";
@@ -15,18 +15,17 @@ import { RangeInput } from "@/components/RangeInput";
 
 interface SearchProps {
   searchParams: {
-    query?: string;
-    year?: number;
-    genres?: number;
+    query?: any;
+    year?: any;
+    genres?: any;
   };
 }
 
 export default function Page({ searchParams }: SearchProps) {
   const router = useRouter();
-  const searchParamsHook = useSearchParams();
-  const yearParam = searchParamsHook.get("year");
-  const queryParam = searchParamsHook.get("query");
-  const genresParam = searchParamsHook.get("genres");
+  const yearParam = searchParams.year;
+  const queryParam = searchParams.query;
+  const genresParam = searchParams.genres;
 
   const [queryInput, setQueryInput] = useState<string>(
     searchParams.query || ""
